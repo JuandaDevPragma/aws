@@ -1,4 +1,4 @@
-package com.juanojedadev.pragma.aws.domain;
+package com.juanojedadev.pragma.aws.domain.model;
 
 /**
  * Record to manage domain data of person
