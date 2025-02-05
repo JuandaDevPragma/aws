@@ -1,9 +1,9 @@
 package com.juanojedadev.pragma.aws.application.ports.output;
 
-import com.juanojedadev.pragma.aws.domain.Person;
+import com.juanojedadev.pragma.aws.domain.model.Person;
 import reactor.core.publisher.Mono;
 
-public interface IPersonRepositoryOutPort {
+public interface IDBRepositoryOutPort {
 
     /**
      * Method to manages the person persistence

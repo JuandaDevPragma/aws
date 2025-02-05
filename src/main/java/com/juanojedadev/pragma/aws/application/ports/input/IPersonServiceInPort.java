@@ -1,6 +1,6 @@
 package com.juanojedadev.pragma.aws.application.ports.input;
 
-import com.juanojedadev.pragma.aws.domain.Person;
+import com.juanojedadev.pragma.aws.domain.model.Person;
 import reactor.core.publisher.Mono;
 
 /**
