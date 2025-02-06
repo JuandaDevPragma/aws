@@ -38,11 +38,12 @@ public class PersonController {
      * @param personDto the request DTO
      * @return Mono with operation input result
      */
-    @PostMapping(produces = "application/json", consumes = "application/json")
+    @PostMapping(value = "/create", produces = "application/json", consumes = "application/json")
     public Mono<ResponseEntity<ResponseWrapper<PersonDto>>> savePerson(@RequestBody PersonDto personDto) {
         return personService.signupPerson(PersonMapperUtils.dtoToPersonDomain(personDto))
-                .flatMap(result -> PersonMapperUtils
-                        .wrapToMonoResponse(PersonMapperUtils.personDomainToDto(result), HttpStatus.CREATED));
+                .flatMap(result -> PersonMapperUtils.wrapToMonoResponse(
+                        PersonMapperUtils.personDomainToDto(result), HttpStatus.CREATED)
+                );
     }
 
     /**

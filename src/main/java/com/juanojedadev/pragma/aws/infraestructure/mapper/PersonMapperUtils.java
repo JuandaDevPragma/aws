@@ -70,7 +70,7 @@ public class PersonMapperUtils {
      * @param <T> generic type, may be anything
      */
     public static <T> Mono<ResponseEntity<ResponseWrapper<T>>> wrapToMonoResponse(T mono, HttpStatus status) {
-        return Mono.just(ResponseEntity.ok(new ResponseWrapper<T>(mono, status)));
+        return Mono.just(ResponseEntity.status(status).body(new ResponseWrapper<T>(mono, status)));
     }
 
 }
