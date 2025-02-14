@@ -4,9 +4,17 @@ import com.juanojedadev.pragma.aws.application.ports.input.IPersonServiceInPort;
 import com.juanojedadev.pragma.aws.domain.wrapper.ResponseWrapper;
 import com.juanojedadev.pragma.aws.infraestructure.dto.PersonDto;
 import com.juanojedadev.pragma.aws.infraestructure.mapper.PersonMapperUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
@@ -16,6 +24,7 @@ import reactor.core.publisher.Mono;
  * @version 1.0
  * @since 1.0
  */
+@Slf4j
 @RestController
 @RequestMapping("/people")
 public class PersonController {
@@ -52,9 +61,9 @@ public class PersonController {
      * @return Mono with operation inquiry result
      */
     @GetMapping(value = "/{id}",produces = "application/json")
-    public Mono<ResponseEntity<ResponseWrapper<PersonDto>>> getPerson(@PathVariable Long id) {
-        return personService.getPersonById(id)
-                .flatMap(result -> PersonMapperUtils
+    public Mono<ResponseEntity<ResponseWrapper<PersonDto>>> getPerson(@PathVariable Long id, @AuthenticationPrincipal Jwt principal) {
+            return personService.getPersonById(id)
+                    .flatMap(result -> PersonMapperUtils
                         .wrapToMonoResponse(PersonMapperUtils.personDomainToDto(result), HttpStatus.OK));
     }
 }
