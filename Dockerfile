@@ -14,11 +14,11 @@ COPY src src
 RUN ./gradlew clean build -x test --no-daemon
 
 FROM eclipse-temurin:21-jdk-jammy
-
 WORKDIR /app
 
 COPY --from=build /app/build/libs/aws-1.0.0.jar .
 
 EXPOSE 8081
 
-ENTRYPOINT ["java", "-jar", "aws-1.0.0.jar", "-Dspring.config.name=application,secrets"]
+ENTRYPOINT ["java", "-jar", "aws-1.0.0.jar"]
+CMD ["--spring.config.name=application,secrets"]

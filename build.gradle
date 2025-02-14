@@ -30,12 +30,17 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'jakarta.servlet:jakarta.servlet-api'
+    testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     runtimeOnly 'org.postgresql:r2dbc-postgresql'
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -57,7 +62,8 @@ jacocoTestReport{
                     '**/domain/*',
                     '**/application/*',
                     '**/dto/*',
-                    '**/persistence/*'
+                    '**/persistence/*',
+                    '**/config/*'
             ])
         })
     }
@@ -73,6 +79,7 @@ jacocoTestCoverageVerification{
                     '**.application.*',
                     '**.dto.*',
                     '**.persistence.*',
+                    '**.config.*'
             ]
 
             limit {
