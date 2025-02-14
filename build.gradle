@@ -1,11 +1,15 @@
 plugins {
     id 'java'
+    id 'java-library'
+    id 'jacoco'
+    id 'name.remal.sonarlint' version '5.1.2'
+    id 'org.sonarqube' version '6.0.1.5171'
     id 'org.springframework.boot' version '3.4.2'
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.juanojedadev.pragma'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
     toolchain {
@@ -25,14 +29,67 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'jakarta.servlet:jakarta.servlet-api'
+    testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
+    runtimeOnly 'org.postgresql:r2dbc-postgresql'
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+    finalizedBy(jacocoTestReport)
 }
+
+jacocoTestReport{
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+    }
+    afterEvaluate {
+        classDirectories.from(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/*Application',
+                    '**/domain/*',
+                    '**/application/*',
+                    '**/dto/*',
+                    '**/persistence/*',
+                    '**/config/*'
+            ])
+        })
+    }
+}
+
+jacocoTestCoverageVerification{
+    violationRules{
+        rule{
+            element = 'CLASS'
+            excludes = [
+                    '**.*Application*',
+                    '**.domain.*',
+                    '**.application.*',
+                    '**.dto.*',
+                    '**.persistence.*',
+                    '**.config.*'
+            ]
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.90
+            }
+        }
+    }
+}
+
+check.dependsOn(jacocoTestCoverageVerification)
+check.dependsOn(sonarlintMain)
